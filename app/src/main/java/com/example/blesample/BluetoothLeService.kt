@@ -7,6 +7,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.content.Context.BLUETOOTH_SERVICE
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import java.util.UUID
 
@@ -40,9 +41,9 @@ object BluetoothLeService {
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     fun startScan(targetName: String) {
         bluetoothAdapter?.bluetoothLeScanner?.startScan(object : ScanCallback() {
-            @SuppressLint("StaticFieldLeak")
             @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
             override fun onScanResult(type: Int, result: ScanResult) {
+                Log.d("SCAN", "onScanResult: ${result.device.name}")
                 if (result.device.name == targetName) {
                     bluetoothAdapter?.bluetoothLeScanner?.stopScan(this)
                     connect(result.device)
