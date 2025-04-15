@@ -35,11 +35,13 @@ class MainActivity : ComponentActivity() {
         val charUUID = UUID.fromString("00002A57-0000-1000-8000-00805f9b34fb")
         val bleService = BluetoothLeService(this, serviceUUID, charUUID)
 
-        val permissionList = mutableListOf(BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION)
+        val permissionList = mutableListOf<String>(BLUETOOTH,BLUETOOTH_ADMIN)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionList.add(BLUETOOTH_CONNECT)
             permissionList.add(BLUETOOTH_SCAN)
+        } else {
+            permissionList.add(ACCESS_FINE_LOCATION)
         }
         val allPermissionsGranted = permissionList.all { permission ->
             ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
@@ -72,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     BleScreen(
                         modifier = Modifier.padding(innerPadding),
                         onScanClick = {
-                            if (allPermissionsGranted) bleService.startScan("BLE_SIMULATOR")
+                            if (allPermissionsGranted) bleService.startScan("Buds Pro")
                         },
                         onSendClick = { bleService.write("Hello from Compose!") },
                         receivedText = receivedText
